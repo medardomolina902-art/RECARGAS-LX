@@ -58,12 +58,11 @@ header p {
 
 /* ==========================================
    BANNER PRINCIPAL RECARGAS GAMER
+   PC Y TELÉFONOS
 ========================================== */
 
 .hero {
   width: 100%;
-
-  /* Proporción de la imagen original */
   aspect-ratio: 8 / 3;
   min-height: 0;
 
@@ -75,7 +74,7 @@ header p {
     url("./assets/recargas-gamer.png") !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  background-size: 100% 100% !important;
+  background-size: cover !important;
 
   display: flex;
   flex-direction: column;
@@ -87,7 +86,7 @@ header p {
   margin-bottom: 25px;
 }
 
-/* El banner ya contiene el título */
+/* La imagen ya incluye el título */
 .hero h1,
 .hero p {
   display: none !important;
@@ -199,6 +198,7 @@ select {
 
 /* ==========================================
    IMÁGENES DE LOS JUEGOS
+   SIN RECORTES
 ========================================== */
 
 .game img,
@@ -209,7 +209,6 @@ select {
 
   object-fit: contain;
   object-position: center;
-
   background: #170811;
 }
 
@@ -220,6 +219,7 @@ select {
 .game img[src*="zinli" i] {
   width: 100%;
   height: 215px;
+
   object-fit: contain;
   object-position: center;
   background: #170811;
@@ -319,6 +319,26 @@ a {
 }
 
 /* ==========================================
+   COMPUTADORAS
+========================================== */
+
+@media (min-width: 761px) {
+
+  .hero {
+    width: 100%;
+    aspect-ratio: 8 / 3;
+    min-height: 0;
+    background-size: cover !important;
+    background-position: center !important;
+  }
+
+  .brand img,
+  .logo-recargas-lx {
+    width: 210px;
+  }
+}
+
+/* ==========================================
    TABLET Y CELULARES
 ========================================== */
 
@@ -335,7 +355,9 @@ a {
 
   .hero {
     aspect-ratio: 8 / 3;
+    min-height: 0;
     border-radius: 16px;
+    background-size: cover !important;
   }
 
   .grid {
@@ -373,7 +395,9 @@ a {
 
   .hero {
     aspect-ratio: 8 / 3;
+    min-height: 0;
     border-radius: 12px;
+    background-size: cover !important;
   }
 
   .tabs button {
