@@ -85,6 +85,20 @@
         ["50 USD de saldo", null],
         ["100 USD de saldo", null]
       ]
+    },
+    {
+      "id": "icloud",
+      "nombre": "Almacenamiento iCloud+",
+      "categoria": "tarjetas",
+      "campo": "Correo Apple ID",
+      "imagen": "assets/icloud.webp",
+      "paquetes": [
+        ["50 GB - 1 mes", 0.99],
+        ["200 GB - 1 mes", 2.99],
+        ["2 TB - 1 mes", 9.99],
+        ["6 TB - 1 mes", 29.99],
+        ["12 TB - 1 mes", 59.99]
+      ]
     }
   ]
 }
