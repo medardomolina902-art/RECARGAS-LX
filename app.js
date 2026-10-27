@@ -2,6 +2,10 @@
 (() => {
   'use strict';
 
+  // ==========================================
+  // RECARGAS LX - CONFIGURACIÓN GENERAL
+  // ==========================================
+
   const cfg = window.RECARGAS_LX || {};
   const $ = selector => document.querySelector(selector);
 
@@ -20,6 +24,21 @@
   const playerInput = $('#player');
   const idLabel = $('#idlabel');
 
+  // ==========================================
+  // IMÁGENES DE PRODUCTOS
+  // ==========================================
+
+  const imagenesLocales = {
+    freefire: 'assets/freefire.webp',
+    bloodstrike: 'assets/bloodstrike.webp',
+    roblox: 'assets/roblox.webp',
+    zinli: 'assets/zinli.png'
+  };
+
+  // ==========================================
+  // FUNCIONES GENERALES
+  // ==========================================
+
   const validPrice = value =>
     typeof value === 'number' &&
     Number.isFinite(value) &&
@@ -33,26 +52,41 @@
       .toLowerCase()
       .trim();
 
-  function showStatus(message) {
-    if (status) status.textContent = message;
-  }
+  const isZinli = game =>
+    String(game?.id || '').toLowerCase() === 'zinli';
 
-  function updateOrderButton() {
-    if (order) {
-      order.disabled =
-        !loaded ||
-        !selected ||
-        !pack ||
-        !validPrice(pack[1]);
+  function showStatus(message) {
+    if (status) {
+      status.textContent = message;
     }
   }
 
+  function updateOrderButton() {
+    if (!order) return;
+
+    order.disabled =
+      !loaded ||
+      !selected ||
+      !pack ||
+      !validPrice(pack[1]);
+  }
+
+  // ==========================================
+  // IMAGEN ALTERNATIVA
+  // ==========================================
+
   function createFallback(game, card) {
     const fallback = document.createElement('div');
+
     fallback.className = 'fallback';
     fallback.textContent = '🎮 ' + game.nombre;
+
     card.prepend(fallback);
   }
+
+  // ==========================================
+  // MOSTRAR PRODUCTOS
+  // ==========================================
 
   function draw() {
     if (!grid) return;
@@ -74,7 +108,9 @@
       const card = document.createElement('article');
       card.className = 'game';
 
+      // Imagen correcta según producto
       const imagePath =
+        imagenesLocales[game.id] ||
         game.imagen ||
         cfg.imagenes?.[game.id] ||
         '';
@@ -85,7 +121,6 @@
         img.src = imagePath;
         img.alt = game.nombre;
         img.loading = 'lazy';
-        img.style.objectFit = 'contain';
 
         img.onerror = () => {
           img.remove();
@@ -105,14 +140,14 @@
 
       const description = document.createElement('p');
 
-      description.textContent =
-        category(game) === 'wallet'
-          ? 'Recarga de saldo digital'
-          : 'Recargas y paquetes digitales';
+      description.textContent = isZinli(game)
+        ? 'Recarga de saldo Zinli por correo'
+        : 'Recargas y paquetes digitales';
 
       const button = document.createElement('button');
       button.className = 'pick';
       button.textContent = 'Ver paquetes →';
+
       button.onclick = () => choose(game);
 
       info.append(title, description, button);
@@ -131,34 +166,46 @@
     }
   }
 
+  // ==========================================
+  // SELECCIÓN DE PRODUCTO
+  // ==========================================
+
   function choose(game) {
     selected = game;
     pack = null;
 
-    const isZinli = game.id === 'zinli';
+    const zinli = isZinli(game);
 
-    const field = game.campo ||
-      (isZinli
-        ? 'Correo electrónico Zinli'
-        : 'Player ID');
+    // Zinli siempre solicita solo correo
+    const field = zinli
+      ? 'Correo electrónico Zinli'
+      : (game.campo || 'Player ID');
 
     if (idLabel) {
       idLabel.textContent = field;
     }
 
     if (playerInput) {
-      playerInput.placeholder = isZinli
-        ? 'ejemplo@correo.com'
+      playerInput.value = '';
+
+      playerInput.type = zinli
+        ? 'email'
+        : 'text';
+
+      playerInput.placeholder = zinli
+        ? 'correo@ejemplo.com'
         : 'Ingresa ' + field;
 
-      playerInput.value = '';
-      playerInput.type = isZinli ? 'email' : 'text';
-      playerInput.autocomplete = isZinli
+      playerInput.autocomplete = zinli
         ? 'email'
         : 'off';
+
+      playerInput.required = true;
     }
 
-    if (packages) packages.replaceChildren();
+    if (packages) {
+      packages.replaceChildren();
+    }
 
     if (summary) {
       summary.textContent = 'Selecciona un paquete';
@@ -166,8 +213,15 @@
 
     updateOrderButton();
 
+    // ========================================
+    // PAQUETES Y PRECIOS
+    // ========================================
+
     for (const item of game.paquetes || []) {
-      if (!Array.isArray(item) || item.length < 2) {
+      if (
+        !Array.isArray(item) ||
+        item.length < 2
+      ) {
         continue;
       }
 
@@ -188,10 +242,10 @@
         pack = item;
 
         packages
-          .querySelectorAll('.package')
-          .forEach(element =>
-            element.classList.remove('selected')
-          );
+          ?.querySelectorAll('.package')
+          .forEach(element => {
+            element.classList.remove('selected');
+          });
 
         button.classList.add('selected');
 
@@ -221,7 +275,15 @@
     });
   }
 
+  // ==========================================
+  // BUSCADOR
+  // ==========================================
+
   $('#search')?.addEventListener('input', draw);
+
+  // ==========================================
+  // CATEGORÍAS
+  // ==========================================
 
   document.querySelectorAll('[data-tab]')
     .forEach(button => {
@@ -236,13 +298,19 @@
             );
           });
 
-        if ($('#search')) {
-          $('#search').value = '';
+        const searchInput = $('#search');
+
+        if (searchInput) {
+          searchInput.value = '';
         }
 
         draw();
       });
     });
+
+  // ==========================================
+  // PEDIDOS POR WHATSAPP
+  // ==========================================
 
   order?.addEventListener('click', () => {
     if (!loaded) {
@@ -259,29 +327,32 @@
       return;
     }
 
+    const zinli = isZinli(selected);
+
     const player = playerInput?.value.trim() || '';
 
+    const field = zinli
+      ? 'Correo electrónico Zinli'
+      : (selected.campo || 'Player ID');
+
     if (!player) {
-      alert(
-        'Completa el campo: ' +
-        (selected.campo || 'Player ID')
-      );
+      alert('Completa el campo: ' + field);
+      playerInput?.focus();
       return;
     }
 
+    // Validar correo Zinli
     if (
-      selected.id === 'zinli' &&
+      zinli &&
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(player)
     ) {
-      alert('Escribe un correo Zinli válido.');
+      alert('Escribe un correo electrónico válido.');
+      playerInput?.focus();
       return;
     }
 
     const payment =
       $('#payment')?.value || 'Por confirmar';
-
-    const field =
-      selected.campo || 'Player ID';
 
     const message = [
       'Hola, quiero solicitar una recarga en ' +
@@ -298,7 +369,9 @@
       .replace(/\D/g, '');
 
     if (!whatsapp) {
-      alert('El número de WhatsApp no está configurado.');
+      alert(
+        'El número de WhatsApp no está configurado.'
+      );
       return;
     }
 
@@ -314,6 +387,10 @@
       'noopener,noreferrer'
     );
   });
+
+  // ==========================================
+  // CARGAR CATÁLOGO LOCAL
+  // ==========================================
 
   async function init() {
     loaded = false;
@@ -336,7 +413,9 @@
       const data = await response.json();
 
       if (!Array.isArray(data.juegos)) {
-        throw new Error('Formato de catálogo inválido');
+        throw new Error(
+          'Formato de catálogo inválido'
+        );
       }
 
       games = data.juegos.filter(game =>
@@ -362,7 +441,7 @@
 
       showStatus(
         'No se pudo cargar el catálogo local. ' +
-        'Revisa catalog-seed.json en Netlify.'
+        'Revisa catalog-seed.json.'
       );
 
       console.error('RECARGAS LX:', error);
@@ -371,5 +450,10 @@
     }
   }
 
+  // ==========================================
+  // INICIAR SISTEMA
+  // ==========================================
+
   init();
+
 })();
