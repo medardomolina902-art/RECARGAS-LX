@@ -1,4 +1,3 @@
-
 (() => {
   'use strict';
 
@@ -257,11 +256,24 @@
 
       const available = validPrice(item[1]);
 
-      button.textContent =
-        item[0] + ' · ' +
-        (available
-          ? money(item[1])
-          : 'Precio pendiente');
+      if (normalizarId(game.id) === 'freefire' || normalizarId(game.nombre) === 'freefire') {
+        button.classList.add('ff-package');
+        const photo = document.createElement('img');
+        const amount = parseInt(String(item[0]).replace(/[^0-9]/g, ''), 10);
+        photo.src = amount >= 1000 ? './assets/caja.png' : './assets/diamantes.png';
+        photo.alt = 'Paquete de ' + item[0];
+        photo.loading = 'lazy';
+        const name = document.createElement('span');
+        name.className = 'ff-package-name';
+        name.textContent = item[0];
+        const price = document.createElement('strong');
+        price.className = 'ff-package-price';
+        price.textContent = available ? money(item[1]) : 'Precio pendiente';
+        button.append(photo, name, price);
+      } else {
+        button.textContent = item[0] + ' · ' +
+          (available ? money(item[1]) : 'Precio pendiente');
+      }
 
       button.disabled = !available;
 
