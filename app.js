@@ -8,7 +8,7 @@
   let games = [];
   let selected = null;
   let pack = null;
-  let verified = false;
+  let loaded = false;
   let tab = 'juegos';
 
   const status = $('#status');
@@ -16,24 +16,49 @@
   const packages = $('#packages');
   const order = $('#order');
   const summary = $('#summary');
+  const selection = $('#selection');
+  const playerInput = $('#player');
+  const idLabel = $('#idlabel');
 
   const validPrice = value =>
     typeof value === 'number' &&
     Number.isFinite(value) &&
     value > 0;
 
-  const money = value => '$' + value.toFixed(2);
+  const money = value =>
+    '$' + value.toFixed(2);
 
   const category = game =>
     String(game.categoria || 'juegos')
       .toLowerCase()
       .trim();
 
+  function showStatus(message) {
+    if (status) status.textContent = message;
+  }
+
+  function updateOrderButton() {
+    if (order) {
+      order.disabled =
+        !loaded ||
+        !selected ||
+        !pack ||
+        !validPrice(pack[1]);
+    }
+  }
+
+  function createFallback(game, card) {
+    const fallback = document.createElement('div');
+    fallback.className = 'fallback';
+    fallback.textContent = '🎮 ' + game.nombre;
+    card.prepend(fallback);
+  }
+
   function draw() {
     if (!grid) return;
 
     const search = ($('#search')?.value || '')
-      .toLowerCase()
+      .toLocaleLowerCase('es')
       .trim();
 
     grid.replaceChildren();
@@ -41,7 +66,7 @@
     const visible = games.filter(game =>
       category(game) === tab &&
       String(game.nombre || '')
-        .toLowerCase()
+        .toLocaleLowerCase('es')
         .includes(search)
     );
 
@@ -56,6 +81,7 @@
 
       if (imagePath) {
         const img = document.createElement('img');
+
         img.src = imagePath;
         img.alt = game.nombre;
         img.loading = 'lazy';
@@ -63,19 +89,12 @@
 
         img.onerror = () => {
           img.remove();
-
-          const fallback = document.createElement('div');
-          fallback.className = 'fallback';
-          fallback.textContent = '🎮 ' + game.nombre;
-          card.prepend(fallback);
+          createFallback(game, card);
         };
 
         card.append(img);
       } else {
-        const fallback = document.createElement('div');
-        fallback.className = 'fallback';
-        fallback.textContent = '🎮 ' + game.nombre;
-        card.append(fallback);
+        createFallback(game, card);
       }
 
       const info = document.createElement('div');
@@ -85,7 +104,11 @@
       title.textContent = game.nombre;
 
       const description = document.createElement('p');
-      description.textContent = 'Recargas y paquetes digitales';
+
+      description.textContent =
+        category(game) === 'wallet'
+          ? 'Recarga de saldo digital'
+          : 'Recargas y paquetes digitales';
 
       const button = document.createElement('button');
       button.className = 'pick';
@@ -99,7 +122,11 @@
 
     if (!visible.length) {
       const empty = document.createElement('p');
-      empty.textContent = 'No hay productos disponibles.';
+
+      empty.textContent = loaded
+        ? 'No hay productos en esta sección.'
+        : 'No hay productos disponibles.';
+
       grid.append(empty);
     }
   }
@@ -108,26 +135,52 @@
     selected = game;
     pack = null;
 
-    const field = game.campo || 'Player ID';
+    const isZinli = game.id === 'zinli';
 
-    $('#idlabel').textContent = field;
-    $('#player').placeholder = 'Ingresa ' + field;
-    $('#player').value = '';
+    const field = game.campo ||
+      (isZinli
+        ? 'Correo electrónico Zinli'
+        : 'Player ID');
 
-    packages.replaceChildren();
-    summary.textContent = 'Selecciona un paquete';
-    order.disabled = true;
+    if (idLabel) {
+      idLabel.textContent = field;
+    }
+
+    if (playerInput) {
+      playerInput.placeholder = isZinli
+        ? 'ejemplo@correo.com'
+        : 'Ingresa ' + field;
+
+      playerInput.value = '';
+      playerInput.type = isZinli ? 'email' : 'text';
+      playerInput.autocomplete = isZinli
+        ? 'email'
+        : 'off';
+    }
+
+    if (packages) packages.replaceChildren();
+
+    if (summary) {
+      summary.textContent = 'Selecciona un paquete';
+    }
+
+    updateOrderButton();
 
     for (const item of game.paquetes || []) {
-      if (!Array.isArray(item) || item.length < 2) continue;
+      if (!Array.isArray(item) || item.length < 2) {
+        continue;
+      }
 
       const button = document.createElement('button');
       button.className = 'package';
 
       const available = validPrice(item[1]);
 
-      button.textContent = item[0] + ' · ' +
-        (available ? money(item[1]) : 'Precio pendiente');
+      button.textContent =
+        item[0] + ' · ' +
+        (available
+          ? money(item[1])
+          : 'Precio pendiente');
 
       button.disabled = !available;
 
@@ -142,21 +195,25 @@
 
         button.classList.add('selected');
 
-        summary.textContent =
-          game.nombre + ' — ' +
-          item[0] + ' — ' +
-          money(item[1]);
+        if (summary) {
+          summary.textContent =
+            game.nombre + ' — ' +
+            item[0] + ' — ' +
+            money(item[1]);
+        }
 
-        order.disabled = !verified;
+        updateOrderButton();
       };
 
-      packages.append(button);
+      packages?.append(button);
     }
 
-    $('#selection')?.removeAttribute('hidden');
+    if (selection) {
+      selection.hidden = false;
+    }
 
     (
-      $('#selection') ||
+      selection ||
       document.querySelector('.panel')
     )?.scrollIntoView({
       behavior: 'smooth',
@@ -166,39 +223,49 @@
 
   $('#search')?.addEventListener('input', draw);
 
-  document.querySelectorAll('[data-tab]').forEach(button => {
-    button.addEventListener('click', () => {
-      tab = button.dataset.tab;
+  document.querySelectorAll('[data-tab]')
+    .forEach(button => {
+      button.addEventListener('click', () => {
+        tab = button.dataset.tab;
 
-      document.querySelectorAll('[data-tab]')
-        .forEach(element =>
-          element.classList.toggle(
-            'active',
-            element === button
-          )
-        );
+        document.querySelectorAll('[data-tab]')
+          .forEach(element => {
+            element.classList.toggle(
+              'active',
+              element === button
+            );
+          });
 
-      if ($('#search')) $('#search').value = '';
+        if ($('#search')) {
+          $('#search').value = '';
+        }
 
-      draw();
+        draw();
+      });
     });
-  });
 
   order?.addEventListener('click', () => {
-    if (!verified) {
+    if (!loaded) {
       alert('El catálogo todavía no está disponible.');
       return;
     }
 
-    if (!selected || !pack || !validPrice(pack[1])) {
-      alert('Selecciona un paquete con precio disponible.');
+    if (
+      !selected ||
+      !pack ||
+      !validPrice(pack[1])
+    ) {
+      alert('Selecciona un paquete disponible.');
       return;
     }
 
-    const player = $('#player')?.value.trim() || '';
+    const player = playerInput?.value.trim() || '';
 
     if (!player) {
-      alert('Completa el campo: ' + selected.campo);
+      alert(
+        'Completa el campo: ' +
+        (selected.campo || 'Player ID')
+      );
       return;
     }
 
@@ -210,22 +277,28 @@
       return;
     }
 
-    const payment = $('#payment')?.value || 'Por confirmar';
+    const payment =
+      $('#payment')?.value || 'Por confirmar';
+
+    const field =
+      selected.campo || 'Player ID';
 
     const message = [
-      `Hola, quiero solicitar una recarga en ${cfg.nombre}.`,
-      `Producto: ${selected.nombre}`,
-      `Paquete: ${pack[0]}`,
-      `Precio: ${money(pack[1])}`,
-      `${selected.campo || 'Jugador'}: ${player}`,
-      `Método de pago: ${payment}`
+      'Hola, quiero solicitar una recarga en ' +
+        (cfg.nombre || 'RECARGAS LX') + '.',
+      '',
+      'Producto: ' + selected.nombre,
+      'Paquete: ' + pack[0],
+      'Precio: ' + money(pack[1]),
+      field + ': ' + player,
+      'Método de pago: ' + payment
     ].join('\n');
 
     const whatsapp = String(cfg.whatsapp || '')
       .replace(/\D/g, '');
 
     if (!whatsapp) {
-      alert('WhatsApp no está configurado.');
+      alert('El número de WhatsApp no está configurado.');
       return;
     }
 
@@ -235,19 +308,22 @@
       '?text=' +
       encodeURIComponent(message);
 
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(
+      url,
+      '_blank',
+      'noopener,noreferrer'
+    );
   });
 
   async function init() {
-    verified = false;
-    if (order) order.disabled = true;
+    loaded = false;
+    updateOrderButton();
 
-    if (status) {
-      status.textContent = 'Cargando precios...';
-    }
+    showStatus('Cargando precios...');
 
     try {
-      const url = cfg.catalogUrl || './catalog-seed.json';
+      const url =
+        cfg.catalogUrl || './catalog-seed.json';
 
       const response = await fetch(url, {
         cache: 'no-store'
@@ -260,33 +336,37 @@
       const data = await response.json();
 
       if (!Array.isArray(data.juegos)) {
-        throw new Error('Catálogo inválido');
+        throw new Error('Formato de catálogo inválido');
       }
 
-      games = data.juegos;
+      games = data.juegos.filter(game =>
+        game &&
+        typeof game.id === 'string' &&
+        typeof game.nombre === 'string' &&
+        Array.isArray(game.paquetes)
+      );
 
-      verified = true;
+      loaded = true;
 
-      if (status) {
-        status.textContent =
-          '✓ Catálogo actualizado desde Netlify';
-      }
+      showStatus(
+        '✓ Precios actualizados desde Netlify'
+      );
 
       draw();
 
     } catch (error) {
-      verified = false;
+      loaded = false;
       games = [];
 
-      if (order) order.disabled = true;
+      updateOrderButton();
 
-      if (status) {
-        status.textContent =
-          'No se pudo cargar el catálogo local. ' +
-          'Revisa catalog-seed.json en Netlify.';
-      }
+      showStatus(
+        'No se pudo cargar el catálogo local. ' +
+        'Revisa catalog-seed.json en Netlify.'
+      );
 
       console.error('RECARGAS LX:', error);
+
       draw();
     }
   }
