@@ -454,9 +454,7 @@
 
       loaded = true;
 
-      showStatus(
-        '✓ Precios actualizados desde Netlify'
-      );
+      showStatus('');
 
       draw();
 
