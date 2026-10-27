@@ -477,6 +477,57 @@
     }
   }
 
+
+  // ==========================================
+  // IDENTIDAD VISUAL: LOGO Y BANNER RECARGAS LX
+  // Archivos requeridos dentro de assets/
+  // ==========================================
+  function instalarImagenesMarca() {
+    const css = document.createElement('style');
+    css.textContent = `
+      .lx-logo-marca { display:block; width:auto; max-width:min(250px, 55vw); height:52px; object-fit:contain; object-position:left center; }
+      .lx-banner-imagen { display:block; width:100%; height:auto; object-fit:contain; }
+      .lx-banner-contenedor { padding:0 !important; overflow:hidden; background:#100018 !important; min-height:0 !important; }
+      .lx-banner-contenedor > .lx-banner-imagen { border-radius:inherit; }
+      @media(max-width:600px) { .lx-logo-marca { height:38px; max-width:180px; } }
+    `;
+    document.head.appendChild(css);
+
+    // Encontrar el encabezado por el texto visible, sin depender de una clase.
+    const candidatos = [...document.querySelectorAll('header a, header strong, header b, header h1, header h2, header span, .brand, .logo')];
+    const marca = candidatos.find(el => el.children.length === 0 && /RECARGAS\s*LX/i.test(el.textContent || ''));
+    if (marca) {
+      const img = document.createElement('img');
+      img.src = './assets/logo-recargas-lx.png';
+      img.alt = 'RECARGAS LX';
+      img.className = 'lx-logo-marca';
+      img.onerror = () => { img.replaceWith(document.createTextNode('⚡ RECARGAS LX')); };
+      marca.replaceChildren(img);
+    }
+
+    // Sustituir solamente el cuadro del título RECARGAS GAMER.
+    const titulo = [...document.querySelectorAll('h1, h2, h3')]
+      .find(el => /RECARGAS\s+GAMER/i.test(el.textContent || ''));
+    if (titulo) {
+      const contenedor = titulo.closest('.hero, .banner, .hero-banner, section') || titulo.parentElement;
+      if (contenedor) {
+        const copia = [...contenedor.childNodes];
+        const img = document.createElement('img');
+        img.src = './assets/banner-recargas-gamer.png';
+        img.alt = 'RECARGAS GAMER - Free Fire, Blood Strike y Roblox';
+        img.className = 'lx-banner-imagen';
+        img.onerror = () => {
+          contenedor.replaceChildren(...copia);
+          contenedor.classList.remove('lx-banner-contenedor');
+        };
+        contenedor.classList.add('lx-banner-contenedor');
+        contenedor.replaceChildren(img);
+      }
+    }
+  }
+
+  instalarImagenesMarca();
+
   // ==========================================
   // INICIAR SISTEMA
   // ==========================================
