@@ -1,1 +1,252 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RECARGAS LX | Recargas Gamer</title><link rel="stylesheet" href="style.css"></head><body><header><div class="brand">⚡ RECARGAS LX</div><p>Recargas digitales y tarjetas para tus juegos favoritos</p></header><main><section class="hero"><h1>RECARGAS GAMER</h1><p>Free Fire • Blood Strike • Roblox • Wallet</p></section><nav class="tabs" aria-label="Categorías"><button class="active" data-tab="juegos">🎮 Juegos</button><button data-tab="tarjetas">💳 Tarjetas</button><button data-tab="wallet">▣ Wallet</button></nav><section><div class="bar"><h2>🎮 Selecciona un producto</h2><input id="search" type="search" placeholder="Buscar producto..."></div><p id="status" role="status">Cargando catálogo local...</p><div id="games" class="grid"></div></section><section id="selection" class="panel" hidden><h2>Selecciona tu paquete</h2><div id="packages" class="packages"></div><label id="idlabel" for="player">Player ID</label><input id="player" autocomplete="off" placeholder="Ingresa ID"><label for="payment">Método de pago</label><select id="payment"><option>Pago Móvil</option><option>Binance Pay</option><option>Consultar por WhatsApp</option></select><p id="summary">Selecciona un paquete</p><button id="order" disabled>Solicitar por WhatsApp →</button><small>El pedido se coordina por WhatsApp; esta página no verifica pagos ni entrega automáticamente.</small></section></main><footer>RECARGAS LX • Atención por WhatsApp • <a href="admin.html">Editar catálogo</a></footer><script src="config.js"></script><script src="app.js"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#10030a"
+  >
+
+  <meta
+    name="description"
+    content="RECARGAS LX - Recargas digitales de Free Fire, Blood Strike, Roblox, tarjetas y Wallet."
+  >
+
+  <title>RECARGAS LX | Recargas Gamer</title>
+
+  <!-- ESTILOS -->
+  <link rel="stylesheet" href="style.css?v=4">
+
+</head>
+
+<body>
+
+  <!-- =====================================
+       ENCABEZADO Y LOGO
+  ====================================== -->
+
+  <header>
+
+    <div class="brand">
+      <img
+        src="assets/logo-recargas-lx.png"
+        alt="RECARGAS LX"
+        class="logo-recargas-lx"
+      >
+    </div>
+
+  </header>
+
+  <!-- =====================================
+       CONTENIDO PRINCIPAL
+  ====================================== -->
+
+  <main>
+
+    <!-- BANNER RECARGAS GAMER -->
+
+    <section
+      class="hero"
+      aria-label="RECARGAS GAMER - Free Fire, Blood Strike, Roblox y Wallet"
+    >
+      <h1>RECARGAS GAMER</h1>
+
+      <p>
+        Free Fire • Blood Strike • Roblox • Wallet
+      </p>
+    </section>
+
+    <!-- =====================================
+         CATEGORÍAS
+    ====================================== -->
+
+    <nav
+      class="tabs"
+      aria-label="Categorías de productos"
+    >
+
+      <button
+        type="button"
+        class="active"
+        data-tab="juegos"
+      >
+        🎮 Juegos
+      </button>
+
+      <button
+        type="button"
+        data-tab="tarjetas"
+      >
+        💳 Tarjetas
+      </button>
+
+      <button
+        type="button"
+        data-tab="wallet"
+      >
+        ▣ Wallet
+      </button>
+
+    </nav>
+
+    <!-- =====================================
+         CATÁLOGO DE PRODUCTOS
+    ====================================== -->
+
+    <section aria-label="Catálogo de recargas">
+
+      <div class="bar">
+
+        <h2>
+          🎮 Selecciona un producto
+        </h2>
+
+        <input
+          id="search"
+          type="search"
+          placeholder="Buscar producto..."
+          aria-label="Buscar producto"
+        >
+
+      </div>
+
+      <!-- ESTADO DEL CATÁLOGO -->
+
+      <p
+        id="status"
+        role="status"
+      >
+        Cargando catálogo local...
+      </p>
+
+      <!-- PRODUCTOS -->
+
+      <div
+        id="games"
+        class="grid"
+      ></div>
+
+    </section>
+
+    <!-- =====================================
+         PANEL DE PEDIDOS
+    ====================================== -->
+
+    <section
+      id="selection"
+      class="panel"
+      hidden
+    >
+
+      <h2>
+        Selecciona tu paquete
+      </h2>
+
+      <!-- PAQUETES DISPONIBLES -->
+
+      <div
+        id="packages"
+        class="packages"
+      ></div>
+
+      <!-- ID DEL JUGADOR O CORREO ZINLI -->
+
+      <label
+        id="idlabel"
+        for="player"
+      >
+        Player ID
+      </label>
+
+      <input
+        id="player"
+        type="text"
+        autocomplete="off"
+        placeholder="Ingresa ID"
+        required
+      >
+
+      <!-- MÉTODOS DE PAGO -->
+
+      <label for="payment">
+        Método de pago
+      </label>
+
+      <select id="payment">
+
+        <option value="Pago Móvil">
+          Pago Móvil
+        </option>
+
+        <option value="Binance Pay">
+          Binance Pay
+        </option>
+
+        <option value="Consultar por WhatsApp">
+          Consultar por WhatsApp
+        </option>
+
+      </select>
+
+      <!-- RESUMEN DEL PEDIDO -->
+
+      <p id="summary">
+        Selecciona un paquete
+      </p>
+
+      <!-- BOTÓN WHATSAPP -->
+
+      <button
+        id="order"
+        type="button"
+        disabled
+      >
+        Solicitar por WhatsApp →
+      </button>
+
+      <!-- INFORMACIÓN IMPORTANTE -->
+
+      <small>
+        El pedido se coordina por WhatsApp.
+        Esta página no verifica pagos
+        ni entrega automáticamente.
+      </small>
+
+    </section>
+
+  </main>
+
+  <!-- =====================================
+       PIE DE PÁGINA
+  ====================================== -->
+
+  <footer>
+
+    <p>
+      RECARGAS LX • Atención por WhatsApp
+    </p>
+
+    <a href="admin.html">
+      Editar catálogo
+    </a>
+
+  </footer>
+
+  <!-- =====================================
+       CONFIGURACIÓN Y SISTEMA
+  ====================================== -->
+
+  <script src="config.js"></script>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
