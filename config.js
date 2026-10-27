@@ -2,7 +2,7 @@ window.RECARGAS_LX = {
   nombre: "RECARGAS LX",
   whatsapp: "584127946115",
   moneda: "USD",
-  apiUrl: "", // URL de tu Cloudflare Worker, sin barra final.
+  apiUrl: "https://recargas-lx-api.centrorecarga361.workers.dev",
 
   // PRECIOS DE EJEMPLO: edítalos antes de recibir pedidos.
   juegos: [
