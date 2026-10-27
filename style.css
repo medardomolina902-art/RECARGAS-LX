@@ -62,18 +62,20 @@ header p {
 
 .hero {
   width: 100%;
-  aspect-ratio: 4 / 1;
-  min-height: 190px;
 
-  border: 1px solid #ff1133;
-  border-radius: 22px;
+  /* Proporción de la imagen original */
+  aspect-ratio: 8 / 3;
+  min-height: 0;
 
-  background-color: #10030a;
+  border: 2px solid #ff0055;
+  border-radius: 18px;
+
+  background-color: #10030a !important;
   background-image:
-   url("./assets/recargas-gamer.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+    url("./assets/recargas-gamer.png") !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
 
   display: flex;
   flex-direction: column;
@@ -85,8 +87,7 @@ header p {
   margin-bottom: 25px;
 }
 
-/* El banner ya incluye su propio título */
-
+/* El banner ya contiene el título */
 .hero h1,
 .hero p {
   display: none !important;
@@ -333,8 +334,7 @@ a {
   }
 
   .hero {
-    aspect-ratio: 3 / 1;
-    min-height: 140px;
+    aspect-ratio: 8 / 3;
     border-radius: 16px;
   }
 
@@ -372,8 +372,7 @@ a {
   }
 
   .hero {
-    aspect-ratio: 2.5 / 1;
-    min-height: 120px;
+    aspect-ratio: 8 / 3;
     border-radius: 12px;
   }
 
