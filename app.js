@@ -29,11 +29,42 @@
   // ==========================================
 
   const imagenesLocales = {
-    freefire: 'assets/freefire.webp',
-    bloodstrike: 'assets/bloodstrike.webp',
-    roblox: 'assets/roblox.webp',
+    freefire: 'assets/free-fire.png',
+    bloodstrike: 'assets/blood-strike.png',
+    roblox: 'assets/roblox.png',
+    mobilelegends: 'assets/mobile-legends.png',
+    pubgmobile: 'assets/pubg-mobile.png',
+    callofdutymobile: 'assets/call-of-duty-mobile.png',
     zinli: 'assets/zinli.png'
   };
+
+  const normalizarId = valor => String(valor || '')
+    .toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  function rutaImagen(game) {
+    const clave = normalizarId(game.id);
+    const porNombre = normalizarId(game.nombre);
+    return imagenesLocales[clave] || imagenesLocales[porNombre] ||
+      game.imagen || cfg.imagenes?.[game.id] || '';
+  }
+
+  // Ajustar imágenes sin modificar el resto de las tarjetas.
+  const estiloFotos = document.createElement('style');
+  estiloFotos.textContent = `
+    #games .game > img {
+      display: block;
+      width: 100%;
+      height: 260px;
+      object-fit: contain;
+      object-position: center;
+      background: #110717;
+      border-radius: 14px 14px 0 0;
+    }
+    @media (max-width: 600px) {
+      #games .game > img { height: 210px; }
+    }
+  `;
+  document.head.appendChild(estiloFotos);
 
   // ==========================================
   // FUNCIONES GENERALES
@@ -109,11 +140,7 @@
       card.className = 'game';
 
       // Imagen correcta según producto
-      const imagePath =
-        imagenesLocales[game.id] ||
-        game.imagen ||
-        cfg.imagenes?.[game.id] ||
-        '';
+      const imagePath = rutaImagen(game);
 
       if (imagePath) {
         const img = document.createElement('img');
