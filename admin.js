@@ -1,1 +1,40 @@
-const api=(window.RECARGAS_LX.apiUrl||'').replace(/\/$/,'');const $=s=>document.querySelector(s);let token=sessionStorage.getItem('lx_token')||'';const msg=t=>$('#msg').textContent=t;async function request(path,options={}){const r=await fetch(api+path,{...options,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})}});const data=await r.json().catch(()=>({}));if(!r.ok)throw Error(data.error||'Error de conexión');return data}async function load(){try{const data=await request('/api/admin/catalog');$('#login').hidden=true;$('#editor').hidden=false;$('#items').replaceChildren();for(const g of data.juegos){const h=document.createElement('h3');h.textContent=g.nombre;$('#items').append(h);for(const p of g.paquetes){const row=document.createElement('div');row.className='price';const label=document.createElement('span');label.textContent=p[0];const input=document.createElement('input');input.type='number';input.min='0.01';input.step='0.01';input.value=p[1];const btn=document.createElement('button');btn.textContent='Guardar';btn.onclick=async()=>{const price=Number(input.value);if(!Number.isFinite(price)||price<=0)return msg('Precio inválido');btn.disabled=true;try{await request('/api/admin/price',{method:'PUT',body:JSON.stringify({game_id:g.id,package_name:p[0],price})});msg('✓ Precio actualizado: '+g.nombre+' / '+p[0]+' = $'+price.toFixed(2))}catch(e){msg(e.message)}finally{btn.disabled=false}};row.append(label,input,btn);$('#items').append(row)}}msg('Catálogo cargado')}catch(e){msg(e.message);$('#login').hidden=false;$('#editor').hidden=true}}$('#enter').onclick=async()=>{if(!api)return msg('Primero debes configurar apiUrl en config.js y desplegar Cloudflare Worker.');try{const data=await request('/api/admin/login',{method:'POST',body:JSON.stringify({password:$('#password').value})});token=data.token;sessionStorage.setItem('lx_token',token);$('#password').value='';await load()}catch(e){msg(e.message)}};$('#logout').onclick=()=>{sessionStorage.removeItem('lx_token');token='';$('#editor').hidden=true;$('#login').hidden=false;msg('Sesión cerrada')};if(token&&api)load();else if(!api)msg('Panel pendiente de conexión: configura Cloudflare Worker siguiendo README.md.');
+(() => {
+  'use strict';
+  let data;
+  const editor = document.querySelector('#editor');
+  const message = document.querySelector('#message');
+  const download = document.querySelector('#download');
+  async function init() {
+    try {
+      const res = await fetch('./catalog-seed.json', {cache:'no-store'});
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+      if (!Array.isArray(data.juegos)) throw new Error('Formato inválido');
+      data.juegos.forEach(g => {
+        const section = document.createElement('section'); section.className = 'panel';
+        const h = document.createElement('h2'); h.textContent = g.nombre; section.append(h);
+        g.paquetes.forEach(p => {
+          const label = document.createElement('label'); label.textContent = p[0] + ' — precio USD (vacío = no disponible)';
+          const input = document.createElement('input'); input.type = 'number'; input.min = '0.01'; input.max = '100000'; input.step = '0.01';
+          input.value = typeof p[1] === 'number' ? p[1].toFixed(2) : '';
+          input.addEventListener('input', () => {
+            if (input.value.trim() === '') { p[1] = null; input.setCustomValidity(''); }
+            else { const n = Number(input.value); if (!Number.isFinite(n) || n <= 0 || n > 100000) {input.setCustomValidity('Introduce un precio positivo válido');} else {p[1] = Math.round(n*100)/100;input.setCustomValidity('');} }
+          });
+          section.append(label,input);
+        });
+        editor.append(section);
+      });
+      message.textContent = 'Catálogo listo para editar. Los precios no se publican hasta subir el JSON a GitHub.';
+      download.disabled = false;
+    } catch(e) { message.textContent = 'Error al abrir el catálogo: ' + e.message; }
+  }
+  download.addEventListener('click', () => {
+    if (![...editor.querySelectorAll('input')].every(x => x.reportValidity())) return;
+    const blob = new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'catalog-seed.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    message.textContent = 'Archivo descargado. Reemplaza catalog-seed.json en GitHub para publicar los precios.';
+  });
+  init();
+})();

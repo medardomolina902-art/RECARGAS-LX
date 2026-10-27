@@ -1,1 +1,11 @@
-{}
+{
+  "juegos": [
+    {"id":"freefire","nombre":"Free Fire","categoria":"juegos","campo":"Player ID","paquetes":[["110 diamantes",0.85],["341 diamantes",2.55],["572 diamantes",4.25],["1166 diamantes",7.95],["2398 diamantes",15.90],["6160 diamantes",39.90]]},
+    {"id":"bloodstrike","nombre":"Blood Strike","categoria":"juegos","campo":"Player ID","paquetes":[["100 + 5 Gold",1.10],["300 + 20 Gold",3.20],["500 + 40 Gold",5.30]]},
+    {"id":"roblox","nombre":"Roblox","categoria":"juegos","campo":"Usuario","paquetes":[["100 Robux",1.80],["400 Robux",5.40]]},
+    {"id":"mobilelegends","nombre":"Mobile Legends","categoria":"juegos","campo":"User ID + Zone ID","paquetes":[["50 + 5 diamantes",1.40],["150 + 15 diamantes",3.90]]},
+    {"id":"pubg","nombre":"PUBG Mobile","categoria":"juegos","campo":"Player ID","paquetes":[["60 UC",1.50],["325 UC",6.50]]},
+    {"id":"cod","nombre":"Call of Duty Mobile","categoria":"juegos","campo":"Player ID","paquetes":[["80 CP",1.50],["400 CP",6.00]]},
+    {"id":"zinli","nombre":"Zinli","categoria":"wallet","campo":"Correo electrónico Zinli","paquetes":[["5 USD de saldo",null],["10 USD de saldo",null],["20 USD de saldo",null],["50 USD de saldo",null],["100 USD de saldo",null]]}
+  ]
+}

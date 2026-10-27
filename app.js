@@ -1,52 +1,88 @@
-(()=>{
-'use strict';
-const cfg=window.RECARGAS_LX,$=s=>document.querySelector(s);
-let games=Array.isArray(cfg.juegos)?cfg.juegos:[],selected=null,pack=null,verified=false,tab='juegos';
-const status=$('#status');
-const category=g=>String(g.categoria||g.category||'juegos').toLowerCase().trim();
-function draw(){
- const q=($('#search')?.value||'').toLowerCase().trim();
- $('#games').replaceChildren();
- for(const g of games.filter(x=>category(x)===tab&&String(x.nombre).toLowerCase().includes(q))){
-  const el=document.createElement('article');el.className='game';
-  if(g.imagen){const img=document.createElement('img');img.src=g.imagen;img.alt=g.nombre;img.loading='lazy';el.append(img)}else{const div=document.createElement('div');div.className='fallback';div.textContent='🎮 '+g.nombre;el.append(div)}
-  const info=document.createElement('div');info.className='info';const h=document.createElement('h3');h.textContent=g.nombre;
-  const p=document.createElement('p');p.textContent='Recargas y paquetes digitales';const btn=document.createElement('button');btn.className='pick';btn.textContent='Ver paquetes →';btn.onclick=()=>choose(g);
-  info.append(h,p,btn);el.append(info);$('#games').append(el);
- }
-}
-function choose(g){
- selected=g;pack=null;
- const field=g.campo||(category(g)==='wallet'?'Correo Zinli':'Player ID');
- $('#idlabel').textContent=field;$('#player').placeholder='Ingresa '+field;$('#player').value='';
- $('#packages').replaceChildren();$('#summary').textContent='Selecciona un paquete';
- for(const p of (g.paquetes||[])){
-  const b=document.createElement('button');b.className='package';b.textContent=p[0]+' · $'+Number(p[1]).toFixed(2);
-  b.onclick=()=>{pack=p;document.querySelectorAll('.package').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('#summary').textContent=g.nombre+' — '+p[0]+' — $'+Number(p[1]).toFixed(2)};
-  $('#packages').append(b);
- }
- document.querySelector('.panel')?.scrollIntoView({behavior:'smooth',block:'center'});
-}
-$('#search').oninput=draw;
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{
- tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#search').value='';draw();
-});
-$('#order').onclick=()=>{
- if(!verified)return alert('Los precios no están sincronizados. Intenta más tarde.');
- if(!selected||!pack||!$('#player').value.trim())return alert('Selecciona producto, paquete y completa el campo solicitado');
- const field=selected.campo||(category(selected)==='wallet'?'Correo Zinli':'Jugador');
- const text=`Hola, quiero solicitar una recarga en RECARGAS LX.\nProducto: ${selected.nombre}\nPaquete: ${pack[0]}\nPrecio: $${Number(pack[1]).toFixed(2)}\n${field}: ${$('#player').value.trim()}\nPago: ${$('#payment').value}`;
- window.open('https://wa.me/'+cfg.whatsapp+'?text='+encodeURIComponent(text),'_blank','noopener');
-};
-async function init(){
- $('#order').disabled=true;draw();
- try{
-  const r=await fetch(cfg.apiUrl.replace(/\/$/,'')+'/api/catalog',{headers:{Accept:'application/json'}});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  const data=await r.json();if(!Array.isArray(data.juegos))throw new Error('Formato de catálogo no reconocido');
-  games=data.juegos.map(g=>({...g,imagen:cfg.juegos.find(x=>x.id===g.id)?.imagen||g.imagen,categoria:g.categoria||g.category||cfg.juegos.find(x=>x.id===g.id)?.categoria||'juegos',campo:g.campo||cfg.juegos.find(x=>x.id===g.id)?.campo}));
-  verified=true;status.textContent='✓ Precios sincronizados';$('#order').disabled=false;draw();
- }catch(e){verified=false;status.textContent='No se pudieron cargar los precios actualizados. Pedidos temporalmente deshabilitados. Revisa Cloudflare Worker.';console.error('RECARGAS LX:',e)}
-}
-init();
+(() => {
+  'use strict';
+  const cfg = window.RECARGAS_LX;
+  const $ = s => document.querySelector(s);
+  let games = [], tab = 'juegos', selected = null, pack = null;
+  const validPrice = n => typeof n === 'number' && Number.isFinite(n) && n > 0;
+  const money = n => '$' + n.toFixed(2);
+  const status = $('#status');
+  const packages = $('#packages');
+  const order = $('#order');
+  const info = $('#selection');
+  const summary = $('#summary');
+  function draw() {
+    const q = $('#search').value.trim().toLocaleLowerCase('es');
+    const grid = $('#games');
+    grid.replaceChildren();
+    const visible = games.filter(g => (g.categoria || 'juegos') === tab && g.nombre.toLocaleLowerCase('es').includes(q));
+    for (const g of visible) {
+      const card = document.createElement('article');
+      card.className = 'game';
+      const img = document.createElement('img');
+      img.src = cfg.imagenes[g.id] || 'assets/banner.webp';
+      img.alt = g.nombre;
+      img.loading = 'lazy';
+      img.onerror = () => { img.remove(); const fallback = document.createElement('div'); fallback.className = 'fallback'; fallback.textContent = '🎮 ' + g.nombre; card.prepend(fallback); };
+      const box = document.createElement('div'); box.className = 'info';
+      const name = document.createElement('h3'); name.textContent = g.nombre;
+      const desc = document.createElement('p'); desc.textContent = 'Recargas y paquetes digitales';
+      const btn = document.createElement('button'); btn.textContent = 'Ver paquetes →'; btn.onclick = () => choose(g);
+      box.append(name, desc, btn); card.append(img, box); grid.append(card);
+    }
+    if (!visible.length) { const p = document.createElement('p'); p.textContent = 'No hay productos en esta sección.'; grid.append(p); }
+  }
+  function choose(g) {
+    selected = g; pack = null; order.disabled = true;
+    info.hidden = false;
+    $('#idlabel').textContent = g.campo || 'Player ID';
+    $('#player').placeholder = 'Ingresa ' + (g.campo || 'Player ID');
+    $('#player').value = '';
+    summary.textContent = 'Selecciona un paquete';
+    packages.replaceChildren();
+    for (const p of g.paquetes) {
+      const b = document.createElement('button'); b.className = 'package';
+      const available = validPrice(p[1]);
+      b.textContent = p[0] + (available ? ' · ' + money(p[1]) : ' · Precio pendiente');
+      b.disabled = !available;
+      b.onclick = () => {
+        pack = p;
+        packages.querySelectorAll('.package').forEach(x => x.classList.remove('selected'));
+        b.classList.add('selected');
+        summary.textContent = g.nombre + ' — ' + p[0] + ' — ' + money(p[1]);
+        order.disabled = false;
+      };
+      packages.append(b);
+    }
+    info.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', () => {
+    tab = btn.dataset.tab;
+    document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('active', x === btn));
+    $('#search').value = '';
+    draw();
+  }));
+  $('#search').addEventListener('input', draw);
+  order.addEventListener('click', () => {
+    const player = $('#player').value.trim();
+    if (!selected || !pack || !validPrice(pack[1])) return alert('Selecciona un paquete con precio disponible.');
+    if (!player) return alert('Completa el campo: ' + selected.campo);
+    if (selected.id === 'zinli' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(player)) return alert('Escribe un correo Zinli válido.');
+    const msg = `Hola, quiero solicitar una recarga en ${cfg.nombre}.\nProducto: ${selected.nombre}\nPaquete: ${pack[0]}\nPrecio: ${money(pack[1])}\n${selected.campo}: ${player}\nMétodo de pago: ${$('#payment').value}`;
+    window.open('https://wa.me/' + cfg.whatsapp + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  });
+  async function init() {
+    try {
+      const r = await fetch(cfg.catalogUrl, {cache:'no-store'});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      if (!Array.isArray(data.juegos)) throw new Error('Catálogo inválido');
+      games = data.juegos;
+      status.textContent = '✓ Catálogo local cargado desde Netlify';
+      draw();
+    } catch(e) {
+      status.textContent = 'No se pudo cargar catalog-seed.json. Revisa que esté publicado junto a index.html.';
+      console.error('RECARGAS LX:',e);
+    }
+  }
+  init();
 })();
