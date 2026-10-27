@@ -72,33 +72,32 @@
         ["400 CP", 6.00]
       ]
     },
-    {
-      "id": "zinli",
-      "nombre": "Zinli",
-      "categoria": "wallet",
-      "campo": "Correo electrónico Zinli",
-      "imagen": "assets/zinli.webp",
-      "paquetes": [
-        ["5 USD de saldo", null],
-        ["10 USD de saldo", null],
-        ["20 USD de saldo", null],
-        ["50 USD de saldo", null],
-        ["100 USD de saldo", null]
-      ]
-    },
-    {
-      "id": "icloud",
-      "nombre": "Almacenamiento iCloud+",
-      "categoria": "tarjetas",
-      "campo": "Correo Apple ID",
-      "imagen": "assets/icloud.webp",
-      "paquetes": [
-        ["50 GB - 1 mes", 0.99],
-        ["200 GB - 1 mes", 2.99],
-        ["2 TB - 1 mes", 9.99],
-        ["6 TB - 1 mes", 29.99],
-        ["12 TB - 1 mes", 59.99]
-      ]
-    }
+
+{
+  "id": "zinli",
+  "nombre": "Zinli",
+  "categoria": "wallet",
+  "campo": "Correo electrónico Zinli",
+  "imagen": "assets/zinli.webp",
+  "paquetes": [
+    ["5 USD de saldo", 5],
+    ["10 USD de saldo", 10],
+    ["20 USD de saldo", 20],
+    ["50 USD de saldo", 50],
+    ["100 USD de saldo", 100]
+  ]
+},
+{
+  "id": "icloud",
+  "nombre": "Almacenamiento iCloud+",
+  "categoria": "tarjetas",
+  "campo": "Correo electrónico Apple ID",
+  "imagen": "assets/icloud.png",
+  "paquetes": [
+    ["50 GB - 1 mes", 0.99],
+    ["200 GB - 1 mes", 2.99],
+    ["2 TB - 1 mes", 9.99],
+    ["6 TB - 1 mes", 29.99],
+    ["12 TB - 1 mes", 59.99]
   ]
 }
