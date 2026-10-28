@@ -1,151 +1,107 @@
+/* =====================================================
+   RECARGAS LX — STYLE.CSS COMPLETO Y ORGANIZADO
+   Fondo de Robux dentro de las tarjetas (transparente)
+   Imagen requerida: assets/robux.webp
+   IMPORTANTE: app.js debe añadir robux-mode a #selection
+   cuando el juego seleccionado sea Roblox.
+===================================================== */
 
-/* ==========================================
-   RECARGAS LX - DISEÑO PROFESIONAL COMPLETO
-========================================== */
-
+/* 01. BASE */
 :root {
   font-family: system-ui, Arial, sans-serif;
-  color: #ffffff;
+  color: #fff;
   background: #10030a;
 }
-
-* {
-  box-sizing: border-box;
-}
-
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  background: linear-gradient(#15030a, #09040a);
   min-height: 100vh;
+  background: linear-gradient(#15030a, #09040a);
 }
-
-header,
-main,
-footer {
+header, main, footer {
   max-width: 1200px;
   margin: auto;
   padding: 22px;
 }
 
-/* ==========================================
-   LOGO
-========================================== */
-
+/* 02. ENCABEZADO Y LOGO */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
-
-.brand {
-  font-size: 1.6rem;
-  font-weight: 900;
-  color: #ff1848;
-}
-
-.brand img,
-.logo-recargas-lx {
+.brand { font-size: 1.6rem; font-weight: 900; color: #ff1848; }
+.brand img, .logo-recargas-lx {
   display: block;
   width: 190px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
 }
+header p { color: #cbbdc4; }
 
-header p {
-  color: #cbbdc4;
-}
-
-/* ==========================================
-   BANNER PRINCIPAL
-========================================== */
-
+/* 03. BANNER PRINCIPAL */
 .hero {
   width: 100%;
   aspect-ratio: 8 / 3;
   min-height: 0;
-
+  margin-bottom: 25px;
   border: 2px solid #ff0055;
   border-radius: 18px;
-
   background-color: #10030a !important;
-  background-image:
-    url("./assets/recargas-gamer.png") !important;
+  background-image: url('./assets/recargas-gamer.png') !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-
   overflow: hidden;
-  margin-bottom: 25px;
 }
+/* La imagen ya trae el título. */
+.hero h1, .hero p { display: none !important; }
 
-.hero h1,
-.hero p {
-  display: none !important;
-}
-
-/* ==========================================
-   CATEGORÍAS
-========================================== */
-
+/* 04. PESTAÑAS DE CATEGORÍAS */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 1px solid #dd0033;
   border-radius: 16px;
   overflow: hidden;
 }
+.tabs button { border: 0; border-radius: 0; background: #090509; }
+.tabs button.active { background: linear-gradient(90deg, #ff1648, #b9002f); }
 
-.tabs button {
-  border: 0;
-  border-radius: 0;
-  background: #090509;
-}
-
-.tabs button.active {
-  background: linear-gradient(
-    90deg,
-    #ff1648,
-    #b9002f
-  );
-}
-
-/* ==========================================
-   BOTONES GENERALES
-========================================== */
-
+/* 05. BOTONES Y CAMPOS */
 button {
-  background: linear-gradient(
-    90deg,
-    #fa1748,
-    #b9002d
-  );
-
-  color: white;
+  background: linear-gradient(90deg, #fa1748, #b9002d);
+  color: #fff;
   border: 0;
   border-radius: 12px;
   padding: 15px;
   cursor: pointer;
   font-weight: 750;
-  transition: 0.25s ease;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid #ff789a;
+  outline-offset: 2px;
+}
+input, select {
+  background: #160711;
+  border: 1px solid #ad1b3f;
+  border-radius: 12px;
+  color: #fff;
+  padding: 14px;
+  width: 100%;
+  font: inherit;
 }
 
-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-/* ==========================================
-   BUSCADOR
-========================================== */
-
+/* 06. BUSCADOR */
 .bar {
   display: flex;
   justify-content: space-between;
@@ -153,60 +109,25 @@ button:disabled {
   gap: 20px;
   margin-top: 22px;
 }
+.bar input { max-width: 360px; }
+#status { color: #bcebc9; }
 
-.bar input {
-  max-width: 360px;
-}
-
-input,
-select {
-  background: #160711;
-  border: 1px solid #ad1b3f;
-  border-radius: 12px;
-  color: white;
-  padding: 14px;
-  width: 100%;
-  font: inherit;
-}
-
-#status {
-  color: #bcebc9;
-}
-
-/* ==========================================
-   CUADRÍCULA DE PRODUCTOS
-========================================== */
-
+/* 07. CATÁLOGO DE JUEGOS */
 .grid {
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
-
-/* ==========================================
-   TARJETAS DE JUEGOS
-========================================== */
-
 .game {
+  min-width: 0;
   border: 1px solid #b70c35;
   border-radius: 18px;
   overflow: hidden;
   background: #13050d;
-  transition: 0.25s ease;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
-
-.game:hover {
-  border-color: #ff2357;
-  box-shadow: 0 0 16px #ff174f33;
-}
-
-/* ==========================================
-   IMÁGENES DE JUEGOS
-========================================== */
-
-.game img,
-.fallback {
+.game:hover { border-color: #ff2357; box-shadow: 0 0 16px #ff174f33; }
+.game img, .fallback {
   display: block;
   width: 100%;
   height: 215px;
@@ -214,372 +135,156 @@ select {
   object-position: center;
   background: #170811;
 }
-
-/* IMAGEN ZINLI */
-
-.game img[src*="zinli" i] {
+.game img[src*='zinli' i] {
   width: 100%;
   height: 215px;
   object-fit: contain;
   object-position: center;
   background: #170811;
 }
-
 .fallback {
   display: grid;
   place-items: center;
   font-size: 1.4rem;
   font-weight: bold;
 }
+.info { text-align: center; padding: 15px; }
+.info h3 { margin: 0; }
+.info p { color: #d5bdc8; font-size: .85rem; }
+.info button { width: 100%; }
 
-/* ==========================================
-   INFORMACIÓN DEL PRODUCTO
-========================================== */
-
-.info {
-  text-align: center;
-  padding: 15px;
-}
-
-.info h3 {
-  margin: 0;
-}
-
-.info p {
-  color: #d5bdc8;
-  font-size: 0.85rem;
-}
-
-.info button {
-  width: 100%;
-}
-
-/* ==========================================
-   PANEL DE PEDIDOS
-========================================== */
-
+/* 08. PANEL DE PEDIDOS */
 .panel {
   margin-top: 30px;
   padding: 24px;
-
   border: 1px solid #ff174f;
   border-radius: 18px;
-
   background: #1b0813;
 }
+.panel[hidden] { display: none !important; }
+.panel h2 { margin: 8px 0 20px; font-size: 23px; }
+.panel label { display: block; margin: 15px 0 7px; }
+.panel small { display: block; margin-top: 12px; color: #bca8b2; }
+.panel #order { margin-top: 15px; width: 100%; }
+.panel #order:not(:disabled):hover { box-shadow: 0 0 20px #ff174f66; }
 
-.panel[hidden] {
-  display: none !important;
-}
-
-.panel h2 {
-  margin-top: 8px;
-  margin-bottom: 20px;
-  font-size: 23px;
-}
-
-.panel label {
-  display: block;
-  margin: 15px 0 7px;
-}
-
-.panel small {
-  display: block;
-  margin-top: 12px;
-  color: #bca8b2;
-}
-
-/* ==========================================
-   CUADRÍCULA DE PAQUETES
-   4 COLUMNAS EN PC
-========================================== */
-
+/* 09. CUADRÍCULA DE PAQUETES */
 .packages {
   display: grid;
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin: 20px 0;
 }
-
-/* ==========================================
-   CUADROS DE PAQUETES
-========================================== */
-
 .package {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-
   min-width: 0;
   min-height: 155px;
   padding: 18px 10px;
-
   border: 1px solid #ff2357;
   border-radius: 15px;
-
   background: #210914;
-  color: #ffffff;
-
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-
   text-align: center;
   font-size: 15px;
   font-weight: 800;
   line-height: 1.5;
   white-space: normal;
   overflow-wrap: anywhere;
-
   cursor: pointer;
-  transition: 0.25s ease;
 }
-
-.package:hover {
+.package:not(:disabled):hover {
   transform: translateY(-3px);
   border-color: #ff4775;
   box-shadow: 0 0 18px #ff174f66;
 }
-
 .package.selected {
   border: 2px solid #ff4775;
   background-color: #461027;
   box-shadow: 0 0 20px #ff174f80;
 }
 
-/* ==========================================
-   ROBLOX - FONDO TRANSPARENTE
-   DENTRO DE CADA CUADRO
-========================================== */
-
-/*
-  Se activa cuando el panel tiene
-  la clase robux-mode.
-
-  Imagen necesaria:
-  assets/robux.webp
-*/
-
-#selection.robux-mode {
-  background:
-    linear-gradient(
-      rgba(18, 2, 12, 0.93),
-      rgba(18, 2, 12, 0.95)
-    ),
-    #190510;
+/* 10. FREE FIRE — CONSERVAR IMÁGENES DE DIAMANTES */
+.ff-package img {
+  display: block;
+  width: 72px;
+  height: 58px;
+  object-fit: contain;
+  margin: 0 auto;
 }
+.ff-package-name { display: block; }
+.ff-package-price { display: block; color: #ff7f9d; font-size: 1.05em; }
 
+/* 11. ROBLOX — IMAGEN PEQUEÑA DE FONDO TRANSPARENTE */
+/* Requiere que app.js agregue la clase robux-mode a #selection. */
+#selection.robux-mode {
+  background: linear-gradient(rgba(18, 2, 12, .93), rgba(18, 2, 12, .95)), #190510;
+}
 #selection.robux-mode .package {
   background-color: #190711;
-
   background-image:
-    linear-gradient(
-      rgba(12, 0, 8, 0.35),
-      rgba(12, 0, 8, 0.78)
-    ),
-    url("./assets/robux.webp");
-
+    linear-gradient(rgba(12, 0, 8, .35), rgba(12, 0, 8, .78)),
+    url('./assets/robux.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   border: 1px solid #ff2357;
-
   text-shadow: 0 2px 6px #000;
-
-  box-shadow:
-    inset 0 0 18px #ff174f20;
+  box-shadow: inset 0 0 18px #ff174f20;
 }
-
-/* EFECTO AL PASAR EL MOUSE */
-
-#selection.robux-mode .package:hover {
+#selection.robux-mode .package:not(:disabled):hover {
   transform: translateY(-4px);
-
   border-color: #ff668a;
-
-  box-shadow:
-    0 0 22px #ff174f88,
-    inset 0 0 18px #ff174f30;
+  box-shadow: 0 0 22px #ff174f88, inset 0 0 18px #ff174f30;
 }
-
-/* PAQUETE ROBUX SELECCIONADO */
-
 #selection.robux-mode .package.selected {
   border: 2px solid #ff4775;
-
   background-image:
-    linear-gradient(
-      rgba(65, 0, 25, 0.30),
-      rgba(30, 0, 15, 0.72)
-    ),
-    url("./assets/robux.webp");
-
-  box-shadow:
-    0 0 22px #ff174f99,
-    inset 0 0 16px #ff174f33;
+    linear-gradient(rgba(65, 0, 25, .30), rgba(30, 0, 15, .72)),
+    url('./assets/robux.webp');
+  box-shadow: 0 0 22px #ff174f99, inset 0 0 16px #ff174f33;
 }
+/* Si app.js genera elementos internos, se ven por encima del fondo. */
+#selection.robux-mode .package > * { position: relative; z-index: 1; }
 
-/* ==========================================
-   BOTÓN DE PEDIDO
-========================================== */
+/* 12. PIE DE PÁGINA */
+footer { text-align: center; color: #c8b4bd; }
+a { color: #ff7295; }
 
-.panel #order {
-  margin-top: 15px;
-  width: 100%;
-}
-
-.panel #order:not(:disabled):hover {
-  box-shadow: 0 0 20px #ff174f66;
-}
-
-/* ==========================================
-   PIE DE PÁGINA
-========================================== */
-
-footer {
-  text-align: center;
-  color: #c8b4bd;
-}
-
-a {
-  color: #ff7295;
-}
-
-/* ==========================================
-   COMPUTADORAS
-========================================== */
-
+/* 13. COMPUTADORAS */
 @media (min-width: 761px) {
-
-  .hero {
-    width: 100%;
-    aspect-ratio: 8 / 3;
-    min-height: 0;
-    background-size: cover !important;
-    background-position: center !important;
-  }
-
-  .brand img,
-  .logo-recargas-lx {
-    width: 210px;
-  }
-
-  .packages {
-    grid-template-columns:
-      repeat(4, minmax(0, 1fr));
-  }
+  .brand img, .logo-recargas-lx { width: 210px; }
+  .packages { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ==========================================
-   TABLET Y CELULARES
-========================================== */
-
+/* 14. TABLET Y CELULARES */
 @media (max-width: 760px) {
-
-  header {
-    display: block;
-  }
-
-  .brand img,
-  .logo-recargas-lx {
-    width: 170px;
-  }
-
-  .hero {
-    aspect-ratio: 8 / 3;
-    min-height: 0;
-    border-radius: 16px;
-    background-size: cover !important;
-  }
-
-  .grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .bar {
-    display: block;
-  }
-
-  .bar input {
-    max-width: none;
-  }
-
-  .game img,
-  .fallback {
-    height: 150px;
-  }
-
-  .game img[src*="zinli" i] {
-    height: 150px;
-  }
-
-  .panel {
-    padding: 15px;
-  }
-
-  .panel h2 {
-    font-size: 20px;
-  }
-
-  .packages {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .package {
-    min-height: 140px;
-    padding: 14px 8px;
-    font-size: 13px;
-  }
+  header { display: block; }
+  .brand img, .logo-recargas-lx { width: 170px; }
+  .hero { border-radius: 16px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bar { display: block; }
+  .bar input { max-width: none; }
+  .game img, .fallback, .game img[src*='zinli' i] { height: 150px; }
+  .panel { padding: 15px; }
+  .panel h2 { font-size: 20px; }
+  .packages { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .package { min-height: 140px; padding: 14px 8px; font-size: 13px; }
 }
 
-/* ==========================================
-   CELULARES PEQUEÑOS
-========================================== */
-
+/* 15. CELULARES PEQUEÑOS */
 @media (max-width: 460px) {
-
-  header,
-  main,
-  footer {
-    padding: 12px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    aspect-ratio: 8 / 3;
-    min-height: 0;
-    border-radius: 12px;
-    background-size: cover !important;
-  }
-
-  .tabs button {
-    padding: 13px 3px;
-  }
-
-  .brand img,
-  .logo-recargas-lx {
-    width: 150px;
-  }
-
-  .packages {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-    gap: 9px;
-  }
-
-  .package {
-    min-height: 130px;
-    padding: 12px 6px;
-    font-size: 12px;
-  }
+  header, main, footer { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .hero { border-radius: 12px; }
+  .tabs button { padding: 13px 3px; }
+  .brand img, .logo-recargas-lx { width: 150px; }
+  .packages { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .package { min-height: 130px; padding: 12px 6px; font-size: 12px; }
 }
