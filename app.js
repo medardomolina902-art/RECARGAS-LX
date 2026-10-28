@@ -89,6 +89,12 @@
       .toLowerCase()
       .trim();
 
+  const isRoblox = game =>
+    ['roblox', 'robux'].some(term =>
+      normalizarId(game?.id).includes(term) ||
+      normalizarId(game?.nombre).includes(term)
+    );
+
   const isZinli = game =>
     String(game?.id || '').toLowerCase() === 'zinli';
 
@@ -209,6 +215,9 @@
 
     const zinli = isZinli(game);
 
+    // Activar fondo Robux solamente en Roblox.
+    selection?.classList.toggle('robux-mode', isRoblox(game));
+
     // Zinli siempre solicita solo correo
     const field = zinli
       ? 'Correo electrónico Zinli'
@@ -277,6 +286,15 @@
         price.className = 'ff-package-price';
         price.textContent = available ? money(item[1]) : 'Precio pendiente';
         button.append(photo, name, price);
+      } else if (isRoblox(game)) {
+        button.classList.add('robux-package');
+        const name = document.createElement('span');
+        name.className = 'robux-package-name';
+        name.textContent = item[0];
+        const price = document.createElement('strong');
+        price.className = 'robux-package-price';
+        price.textContent = available ? money(item[1]) : 'Precio pendiente';
+        button.append(name, price);
       } else {
         button.textContent = item[0] + ' · ' +
           (available ? money(item[1]) : 'Precio pendiente');
