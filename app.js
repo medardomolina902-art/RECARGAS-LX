@@ -13,6 +13,7 @@
   let pack = null;
   let loaded = false;
   let tab = 'juegos';
+  let tasaBinance = null;
 
   const status = $('#status');
   const grid = $('#games');
@@ -74,8 +75,14 @@
     Number.isFinite(value) &&
     value > 0;
 
-  const money = value =>
-    '$' + value.toFixed(2);
+  // Los precios del catálogo están expresados en USDT.
+  // La tasa se lee de catalog-seed.json en cada carga.
+  const money = value => {
+    if (!Number.isFinite(tasaBinance) || tasaBinance <= 0) {
+      return 'Tasa no disponible';
+    }
+    return Math.round(value * tasaBinance).toLocaleString('es-VE') + ' Bs';
+  };
 
   const category = game =>
     String(game.categoria || 'juegos')
@@ -457,6 +464,12 @@
         );
       }
 
+      const nuevaTasa = Number(data.tasa_binance);
+      if (!Number.isFinite(nuevaTasa) || nuevaTasa <= 0) {
+        throw new Error('Configura tasa_binance con un número positivo en catalog-seed.json');
+      }
+      tasaBinance = nuevaTasa;
+
       games = data.juegos.filter(game =>
         game &&
         typeof game.id === 'string' &&
@@ -473,12 +486,13 @@
     } catch (error) {
       loaded = false;
       games = [];
+      tasaBinance = null;
 
       updateOrderButton();
 
       showStatus(
         'No se pudo cargar el catálogo local. ' +
-        'Revisa catalog-seed.json.'
+        'Revisa catalog-seed.json y tasa_binance.'
       );
 
       console.error('RECARGAS LX:', error);
