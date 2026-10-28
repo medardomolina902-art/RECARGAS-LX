@@ -1,4 +1,3 @@
-
 {
   "tasa_binance": 1007,
   "moneda": "VES",
@@ -10,14 +9,38 @@
       "campo": "Player ID",
       "imagen": "assets/freefire.webp",
       "paquetes": [
-        ["110 diamantes", 0.75],
-        ["220 diamantes", 1.51],
-        ["341 diamantes", 2.26],
-        ["572 diamantes", 3.81],
-        ["1166 diamantes", 7.07],
-        ["2398 diamantes", 14.00],
-        ["6160 diamantes", 35.66],
-        ["12320 diamantes", 71.32]
+        [
+          "110 diamantes",
+          0.75
+        ],
+        [
+          "220 diamantes",
+          1.51
+        ],
+        [
+          "341 diamantes",
+          2.26
+        ],
+        [
+          "572 diamantes",
+          3.81
+        ],
+        [
+          "1166 diamantes",
+          7.07
+        ],
+        [
+          "2398 diamantes",
+          14
+        ],
+        [
+          "6160 diamantes",
+          35.66
+        ],
+        [
+          "12320 diamantes",
+          71.32
+        ]
       ]
     },
     {
@@ -27,13 +50,34 @@
       "campo": "Player ID",
       "imagen": "assets/bloodstrike.webp",
       "paquetes": [
-        ["100 + 5 Gold", 0.81],
-        ["300 + 20 Gold", 2.42],
-        ["500 + 40 Gold", 4.05],
-        ["1000 + 100 Gold", 8.09],
-        ["2000 + 260 Gold", 16.18],
-        ["5000 + 800 Gold", 40.45],
-        ["Bolsa de la Suerte Semanal", 0.87]
+        [
+          "100 + 5 Gold",
+          0.81
+        ],
+        [
+          "300 + 20 Gold",
+          2.42
+        ],
+        [
+          "500 + 40 Gold",
+          4.05
+        ],
+        [
+          "1000 + 100 Gold",
+          8.09
+        ],
+        [
+          "2000 + 260 Gold",
+          16.18
+        ],
+        [
+          "5000 + 800 Gold",
+          40.45
+        ],
+        [
+          "Bolsa de la Suerte Semanal",
+          0.87
+        ]
       ]
     },
     {
@@ -43,13 +87,34 @@
       "campo": "Usuario",
       "imagen": "assets/roblox.webp",
       "paquetes": [
-        ["50 Robux", 1.26],
-        ["275 Robux", 2.80],
-        ["360 Robux", 3.60],
-        ["555 Robux", 5.59],
-        ["1110 Robux", 12.43],
-        ["1665 Robux", 16.76],
-        ["2770 Robux", 28.61]
+        [
+          "50 Robux",
+          1.26
+        ],
+        [
+          "275 Robux",
+          2.8
+        ],
+        [
+          "360 Robux",
+          3.6
+        ],
+        [
+          "555 Robux",
+          5.59
+        ],
+        [
+          "1110 Robux",
+          12.43
+        ],
+        [
+          "1665 Robux",
+          16.76
+        ],
+        [
+          "2770 Robux",
+          28.61
+        ]
       ]
     },
     {
@@ -59,16 +124,46 @@
       "campo": "User ID + Zone ID",
       "imagen": "assets/mobilelegends.webp",
       "paquetes": [
-        ["55 diamantes", 0.88],
-        ["165 diamantes", 2.63],
-        ["275 diamantes", 4.21],
-        ["565 diamantes", 8.65],
-        ["86 diamantes", 1.33],
-        ["172 diamantes", 2.67],
-        ["706 diamantes", 10.67],
-        ["2195 diamantes", 32.01],
-        ["Pase Semanal de Diamantes", 1.69],
-        ["Pase Twilight", 8.80]
+        [
+          "55 diamantes",
+          0.88
+        ],
+        [
+          "165 diamantes",
+          2.63
+        ],
+        [
+          "275 diamantes",
+          4.21
+        ],
+        [
+          "565 diamantes",
+          8.65
+        ],
+        [
+          "86 diamantes",
+          1.33
+        ],
+        [
+          "172 diamantes",
+          2.67
+        ],
+        [
+          "706 diamantes",
+          10.67
+        ],
+        [
+          "2195 diamantes",
+          32.01
+        ],
+        [
+          "Pase Semanal de Diamantes",
+          1.69
+        ],
+        [
+          "Pase Twilight",
+          8.8
+        ]
       ]
     },
     {
@@ -78,11 +173,26 @@
       "campo": "Player ID",
       "imagen": "assets/pubg.webp",
       "paquetes": [
-        ["60 UC", 0.99],
-        ["300 + 25 UC", 4.95],
-        ["600 + 60 UC", 9.90],
-        ["3000 + 850 UC", 49.52],
-        ["6000 + 2100 UC", 99.04]
+        [
+          "60 UC",
+          0.99
+        ],
+        [
+          "300 + 25 UC",
+          4.95
+        ],
+        [
+          "600 + 60 UC",
+          9.9
+        ],
+        [
+          "3000 + 850 UC",
+          49.52
+        ],
+        [
+          "6000 + 2100 UC",
+          99.04
+        ]
       ]
     },
     {
@@ -92,8 +202,14 @@
       "campo": "Player ID",
       "imagen": "assets/cod.webp",
       "paquetes": [
-        ["80 CP", 1.50],
-        ["400 CP", 6.00]
+        [
+          "80 CP",
+          1.5
+        ],
+        [
+          "400 CP",
+          6
+        ]
       ]
     },
     {
@@ -103,11 +219,26 @@
       "campo": "Correo electrónico Zinli",
       "imagen": "assets/zinli.webp",
       "paquetes": [
-        ["5 USD de saldo", 6.50],
-        ["10 USD de saldo", 11.60],
-        ["20 USD de saldo", 23.10],
-        ["50 USD de saldo", 54.20],
-        ["100 USD de saldo", 105.06]
+        [
+          "5 USD de saldo",
+          6.5
+        ],
+        [
+          "10 USD de saldo",
+          11.6
+        ],
+        [
+          "20 USD de saldo",
+          23.1
+        ],
+        [
+          "50 USD de saldo",
+          54.2
+        ],
+        [
+          "100 USD de saldo",
+          105.06
+        ]
       ]
     },
     {
@@ -117,11 +248,26 @@
       "campo": "Correo electrónico Apple ID",
       "imagen": "assets/iCloud+ en un mundo de neón.png",
       "paquetes": [
-        ["50 GB - 1 mes", 0.99],
-        ["200 GB - 1 mes", 2.99],
-        ["2 TB - 1 mes", 9.99],
-        ["6 TB - 1 mes", 29.99],
-        ["12 TB - 1 mes", 59.99]
+        [
+          "50 GB - 1 mes",
+          0.99
+        ],
+        [
+          "200 GB - 1 mes",
+          2.99
+        ],
+        [
+          "2 TB - 1 mes",
+          9.99
+        ],
+        [
+          "6 TB - 1 mes",
+          29.99
+        ],
+        [
+          "12 TB - 1 mes",
+          59.99
+        ]
       ]
     }
   ]
