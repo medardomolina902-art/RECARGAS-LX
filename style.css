@@ -1,6 +1,6 @@
 
 /* ==========================================
-   RECARGAS LX - ESTILOS GENERALES
+   RECARGAS LX - DISEÑO PROFESIONAL COMPLETO
 ========================================== */
 
 :root {
@@ -16,6 +16,7 @@
 body {
   margin: 0;
   background: linear-gradient(#15030a, #09040a);
+  min-height: 100vh;
 }
 
 header,
@@ -27,7 +28,7 @@ footer {
 }
 
 /* ==========================================
-   ENCABEZADO Y LOGO RECARGAS LX
+   LOGO
 ========================================== */
 
 header {
@@ -57,8 +58,7 @@ header p {
 }
 
 /* ==========================================
-   BANNER PRINCIPAL RECARGAS GAMER
-   PC Y TELÉFONOS
+   BANNER PRINCIPAL
 ========================================== */
 
 .hero {
@@ -72,7 +72,7 @@ header p {
   background-color: #10030a !important;
   background-image:
     url("./assets/recargas-gamer.png") !important;
-  background-position: center center !important;
+  background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
 
@@ -86,7 +86,6 @@ header p {
   margin-bottom: 25px;
 }
 
-/* La imagen ya incluye el título */
 .hero h1,
 .hero p {
   display: none !important;
@@ -94,7 +93,6 @@ header p {
 
 /* ==========================================
    CATEGORÍAS
-   JUEGOS - TARJETAS - WALLET
 ========================================== */
 
 .tabs {
@@ -120,7 +118,7 @@ header p {
 }
 
 /* ==========================================
-   BOTONES
+   BOTONES GENERALES
 ========================================== */
 
 button {
@@ -136,6 +134,7 @@ button {
   padding: 15px;
   cursor: pointer;
   font-weight: 750;
+  transition: 0.25s ease;
 }
 
 button:disabled {
@@ -144,7 +143,7 @@ button:disabled {
 }
 
 /* ==========================================
-   BUSCADOR DE PRODUCTOS
+   BUSCADOR
 ========================================== */
 
 .bar {
@@ -186,7 +185,7 @@ select {
 }
 
 /* ==========================================
-   TARJETAS DE PRODUCTOS
+   TARJETAS DE JUEGOS
 ========================================== */
 
 .game {
@@ -194,11 +193,16 @@ select {
   border-radius: 18px;
   overflow: hidden;
   background: #13050d;
+  transition: 0.25s ease;
+}
+
+.game:hover {
+  border-color: #ff2357;
+  box-shadow: 0 0 16px #ff174f33;
 }
 
 /* ==========================================
-   IMÁGENES DE LOS JUEGOS
-   SIN RECORTES
+   IMÁGENES DE JUEGOS
 ========================================== */
 
 .game img,
@@ -206,28 +210,20 @@ select {
   display: block;
   width: 100%;
   height: 215px;
-
   object-fit: contain;
   object-position: center;
   background: #170811;
 }
 
-/* ==========================================
-   IMAGEN ESPECIAL DE ZINLI
-========================================== */
+/* IMAGEN ZINLI */
 
 .game img[src*="zinli" i] {
   width: 100%;
   height: 215px;
-
   object-fit: contain;
   object-position: center;
   background: #170811;
 }
-
-/* ==========================================
-   IMAGEN ALTERNATIVA
-========================================== */
 
 .fallback {
   display: grid;
@@ -265,9 +261,21 @@ select {
 .panel {
   margin-top: 30px;
   padding: 24px;
-  border: 1px solid #c0163c;
+
+  border: 1px solid #ff174f;
   border-radius: 18px;
+
   background: #1b0813;
+}
+
+.panel[hidden] {
+  display: none !important;
+}
+
+.panel h2 {
+  margin-top: 8px;
+  margin-bottom: 20px;
+  font-size: 23px;
 }
 
 .panel label {
@@ -282,27 +290,150 @@ select {
 }
 
 /* ==========================================
-   PAQUETES Y PRECIOS
+   CUADRÍCULA DE PAQUETES
+   4 COLUMNAS EN PC
 ========================================== */
 
 .packages {
   display: grid;
   grid-template-columns:
-    repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
+    repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0;
 }
 
+/* ==========================================
+   CUADROS DE PAQUETES
+========================================== */
+
 .package {
-  background: #29101c;
-  border: 1px solid #ad2747;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  min-width: 0;
+  min-height: 155px;
+  padding: 18px 10px;
+
+  border: 1px solid #ff2357;
+  border-radius: 15px;
+
+  background: #210914;
+  color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  text-align: center;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.package:hover {
+  transform: translateY(-3px);
+  border-color: #ff4775;
+  box-shadow: 0 0 18px #ff174f66;
 }
 
 .package.selected {
-  background: #b60034;
+  border: 2px solid #ff4775;
+  background-color: #461027;
+  box-shadow: 0 0 20px #ff174f80;
 }
+
+/* ==========================================
+   ROBLOX - FONDO TRANSPARENTE
+   DENTRO DE CADA CUADRO
+========================================== */
+
+/*
+  Se activa cuando el panel tiene
+  la clase robux-mode.
+
+  Imagen necesaria:
+  assets/robux.webp
+*/
+
+#selection.robux-mode {
+  background:
+    linear-gradient(
+      rgba(18, 2, 12, 0.93),
+      rgba(18, 2, 12, 0.95)
+    ),
+    #190510;
+}
+
+#selection.robux-mode .package {
+  background-color: #190711;
+
+  background-image:
+    linear-gradient(
+      rgba(12, 0, 8, 0.35),
+      rgba(12, 0, 8, 0.78)
+    ),
+    url("./assets/robux.webp");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border: 1px solid #ff2357;
+
+  text-shadow: 0 2px 6px #000;
+
+  box-shadow:
+    inset 0 0 18px #ff174f20;
+}
+
+/* EFECTO AL PASAR EL MOUSE */
+
+#selection.robux-mode .package:hover {
+  transform: translateY(-4px);
+
+  border-color: #ff668a;
+
+  box-shadow:
+    0 0 22px #ff174f88,
+    inset 0 0 18px #ff174f30;
+}
+
+/* PAQUETE ROBUX SELECCIONADO */
+
+#selection.robux-mode .package.selected {
+  border: 2px solid #ff4775;
+
+  background-image:
+    linear-gradient(
+      rgba(65, 0, 25, 0.30),
+      rgba(30, 0, 15, 0.72)
+    ),
+    url("./assets/robux.webp");
+
+  box-shadow:
+    0 0 22px #ff174f99,
+    inset 0 0 16px #ff174f33;
+}
+
+/* ==========================================
+   BOTÓN DE PEDIDO
+========================================== */
 
 .panel #order {
   margin-top: 15px;
+  width: 100%;
+}
+
+.panel #order:not(:disabled):hover {
+  box-shadow: 0 0 20px #ff174f66;
 }
 
 /* ==========================================
@@ -335,6 +466,11 @@ a {
   .brand img,
   .logo-recargas-lx {
     width: 210px;
+  }
+
+  .packages {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -381,6 +517,26 @@ a {
   .game img[src*="zinli" i] {
     height: 150px;
   }
+
+  .panel {
+    padding: 15px;
+  }
+
+  .panel h2 {
+    font-size: 20px;
+  }
+
+  .packages {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .package {
+    min-height: 140px;
+    padding: 14px 8px;
+    font-size: 13px;
+  }
 }
 
 /* ==========================================
@@ -388,6 +544,12 @@ a {
 ========================================== */
 
 @media (max-width: 460px) {
+
+  header,
+  main,
+  footer {
+    padding: 12px;
+  }
 
   .grid {
     grid-template-columns: 1fr;
@@ -407,5 +569,17 @@ a {
   .brand img,
   .logo-recargas-lx {
     width: 150px;
+  }
+
+  .packages {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .package {
+    min-height: 130px;
+    padding: 12px 6px;
+    font-size: 12px;
   }
 }
